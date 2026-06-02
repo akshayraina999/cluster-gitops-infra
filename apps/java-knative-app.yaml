@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: java-knative-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    # Points straight back to your original application repo
+    repoURL: 'https://github.com/akshayraina999/java-knative-app.git'
+    targetRevision: HEAD
+    path: k8s-manifests # Where Jenkins pushes the tag changes!
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: devops-tools
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

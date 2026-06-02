@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root-platform-conductor
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io # Deletes children if parent is removed
+spec:
+  project: default
+  source:
+    # Tell ArgoCD to watch your new infra control repository
+    repoURL: 'https://github.com/akshayraina999/cluster-gitops-infra.git'
+    targetRevision: HEAD
+    path: apps # Traverses everything inside the apps/ folder
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
